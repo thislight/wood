@@ -19,5 +19,5 @@ dnf install git
 cd ~
 git clone https://github.com/thislight/wood.git
 cd wood
-python setup.py
+python setup.py install
 ````
