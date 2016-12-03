@@ -2,7 +2,7 @@
 """
 Wood author: thislight
 
-Copyright 2016 thsilight
+Copyright 2016 thislight
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ Copyright 2016 thsilight
    See the License for the specific language governing permissions and
    limitations under the License.
 
-Under License Apache v2, more infomation, see file 'LICENSE' in project root directory.
+Under License Apache v2, more information, see file 'LICENSE' in project root directory.
 """
 import tornado.httpserver as _httpserver
 import tornado.web as _web
