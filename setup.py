@@ -1,5 +1,5 @@
 from setuptools import setup
-from wood.wood import VERSION
+from wood.info import VERSION
 
 
 setup(
@@ -14,7 +14,6 @@ classifiers=[
 'License :: OSI Approved :: Apache Software License',
 ],
 packages=['wood']
-
 )
 
 

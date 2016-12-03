@@ -24,9 +24,6 @@ import tornado.ioloop as _ioloop
 import logging
 
 
-VERSION = 0.1
-
-
 class BaseTornadoView(_web.RequestHandler):
     pass
 
