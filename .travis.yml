@@ -9,6 +9,7 @@ python:
   - "pypy-5.3.1"
 # command to install dependencies
 install:
+  - pip install pytest
   - pip install -r test-requirements.txt
   - pip install .
 script: 
