@@ -1,5 +1,7 @@
 from setuptools import setup
-from wood.info import VERSION
+
+
+VERSION=0.1
 
 
 setup(
