@@ -26,6 +26,7 @@ cd ~
 git clone https://github.com/thislight/wood.git
 cd wood
 python setup.py install
+# Or you can use 'pip install .'
 ````
 
 ## How to use
