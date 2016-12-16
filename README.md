@@ -1,7 +1,11 @@
 # wood
 The faster way to build web application by tornado.
 
+>Wood is grow fast.API maybe change a lot in untest branch.
+
 ## Quick Start
+>If you want to use the latest version, you can try to use 'untest' branch.
+
 >wood is alpha now, you only can install wth code.
 
 1.Install `git`.
