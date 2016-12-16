@@ -32,10 +32,9 @@ class RouteAllow(object):
 
 
 class _PackedView(RouteAllow):
-    def __init__(self,view,name='View',uri='/'):
+    def __init__(self,view,uri='/'):
         self._view = view
-        self._view.__name__ = name
-        self.__name__ = name + '_Packed'
+        self.__name__ = self._view.__name__ + '_Packed'
         self._uri = uri
     
     @property
@@ -86,10 +85,13 @@ class _PackedView(RouteAllow):
         return self._uri
 
 
-def _make_empty_view(name,uri,*parents):
-    class View(BaseTornadoView,*parents):
-        pass
-    _packed = _PackedView(View,name=name,uri=uri)
+def _make_empty_view(name='View',uri,*parents):
+    """
+    a help function for make a empty view.
+    Return: _PackedView
+    """
+    view = type(name,(BaseTornadoView,*parent),{})
+    _packed = _PackedView(view,uri=uri)
     return _packed
 
 
@@ -163,5 +165,4 @@ class Wood(object):
         
         
 # The end of the file
-
 
