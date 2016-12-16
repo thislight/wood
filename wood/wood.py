@@ -27,11 +27,11 @@ import logging
 class BaseTornadoView(_web.RequestHandler):
     pass
 
-class RouteAllow(object):
+class RegisterAllow(object):
     pass
 
 
-class _PackedView(RouteAllow):
+class _PackedView(RegisterAllow):
     def __init__(self,view,uri='/'):
         self._view = view
         self.__name__ = self._view.__name__ + '_Packed'
@@ -121,20 +121,20 @@ class Wood(object):
     
     def empty(self,uri,name,*parents):
         """
-        Return a empty TonradoView object.
+        Return a empty TonradoView
         """
         v = _make_empty_view(uri=uri,name=name,*parents)
-        self.route(v)
+        self.register(v)
         return v
     
-    def route(self,view):
+    def register(self,view):
         self.handler(uri=view.uri,handler=view.handler)
     
-    def route_all(self,g):
+    def register_all(self,g):
         for k in g:
             o = g[k]
-            if isinstance(o,RouteAllow):
-                self.route(o)
+            if isinstance(o,RegisterAllow):
+                self.register(o)
     
     def bind(self,port):
         self.server.bind(port)
@@ -165,4 +165,3 @@ class Wood(object):
         
         
 # The end of the file
-
