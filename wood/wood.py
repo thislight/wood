@@ -31,7 +31,15 @@ class RegisterAllow(object):
     pass
 
 
-class _PackedView(RegisterAllow):
+class OverrideObject(object):
+    def override(self,name,back=False):
+        def override(func):
+            setattr(self.handler,name,func)
+            if back: return func
+        return override
+
+
+class _PackedView(RegisterAllow,OverrideObject):
     def __init__(self,view,uri='/'):
         self._view = view
         self.__name__ = self._view.__name__ + '_Packed'
@@ -64,13 +72,6 @@ class _PackedView(RegisterAllow):
     @property
     def options(self):
         return self.override('options',back=True)
-    
-     
-    def override(self,name,back=False):
-        def override(func):
-            setattr(self.handler,name,func)
-            if back: return func
-        return override
     
     @property
     def handler(self):
@@ -180,3 +181,4 @@ class Wood(object):
         
         
 # The end of the file
+
