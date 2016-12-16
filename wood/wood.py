@@ -121,11 +121,26 @@ class Wood(object):
     
     def empty(self,uri,name,*parents):
         """
-        Return a empty TonradoView
+        Return: _PackedView
         """
         v = _make_empty_view(uri=uri,name=name,*parents)
         self.register(v)
         return v
+    
+    def route(self,uri,method='get',*parents,**kargs):
+        """
+        Route a function to uri.
+        arg method: method for function
+        Return: function
+        """
+        def route(f):
+            """
+            Return: function
+            """
+            view = self.empty(uri,f.__name__,*parents)
+            method = method.lower()
+            return view.override(method)(f,back=True)
+        return route
     
     def register(self,view):
         self.handler(uri=view.uri,handler=view.handler)

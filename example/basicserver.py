@@ -23,9 +23,7 @@ from wood import Wood
 
 w = Wood(__name__,debug=True,log_function=print)
 
-IndexHandler = w.empty(uri='/',name='IndexHandler')
-
-@IndexHandler.get
+@w.route(r'/',method='GET')
 def index_page(self):
     self.write('滑稽，这里什么都没有\n(HuajiEnv)')
 
