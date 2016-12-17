@@ -47,7 +47,7 @@ class BaseTornadoView(_web.RequestHandler):
     
     def __log__(self):
         info = self._get_info()
-        return BASELOGTEMPLATE.format(**info)
+        return BASELOGTEMPLATE.format(**info,handler_name=self.__name__)
     
     def timeit_callback(self,s):
         self._time = s
