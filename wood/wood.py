@@ -21,11 +21,37 @@ Under License Apache v2, more information, see file 'LICENSE' in project root di
 import tornado.httpserver as _httpserver
 import tornado.web as _web
 import tornado.ioloop as _ioloop
+from .timeit import timeit
 import logging
+import time
+
+
+BASELOGTEMPLATE = '{method} {httpver} {path} {handler_name} {request_time}s/{timeit}s'
 
 
 class BaseTornadoView(_web.RequestHandler):
-    pass
+    def _get_info(self):
+        _r = self.request
+        return dict(
+        method=_r.method,
+        path=_r.path,
+        httpver=_r.version,
+        cliip=_r.remote_ip,
+        p=_r.protocol,
+        issec=True if _r.protocol.endswith('s') else False,
+        host=_r.host,
+        args=_r.arguments,
+        request_time=_r.request_time(),
+        timeit=self._time,
+        )
+    
+    def __log__(self):
+        info = self._get_info()
+        return BASELOGTEMPLATE.format(**info)
+    
+    def timeit_callback(self,s):
+        self._time = s
+        
 
 class RegisterAllow(object):
     pass
@@ -84,6 +110,16 @@ class _PackedView(RegisterAllow,OverrideObject):
     @property
     def uri(self):
         return self._uri
+    
+    def _timeit(self,f):
+        return timeit(callback=self. handler.timeit_callback,num=2)(f)
+    
+    
+    def override(self, back=False):
+        def override(func):
+            setattr(self.handler,name,func)
+            if back: self._timeit(return func)
+    return override    
 
 
 def _make_empty_view(name='View',uri,*parents):
@@ -102,12 +138,30 @@ def _make_uri_tuple(uri,handler,kargs=None):
     return tuple(t)
 
 
+
+def _print_and_log(logger=logging.getLogger(),*args):
+    print(*args)
+    logger.info(*args)
+
+
+def base_log_function(o):
+    if hasattr(o,'__log__'):# 
+        _print_and_log(o.__log__)
+    elif isinstance(o,_web.ErrorHandler):
+        _print_and_log(o)# TODO: More simple and useful infomation
+    else:
+        _print_and_log(o)   
+        
+
 class Wood(object):
     def __init__(self,name=__name__,**config):
         self._app = _web.Application(**config)
         self._server = _httpserver.HTTPServer(self._app,xheaders=True)
         self._name = name
         self.prepare_funcs = []
+        if 'log_function' not in self.application.settings:
+            self.application.settings['log_function'] = base_log_function
+        
     
     @property
     def server(self):
