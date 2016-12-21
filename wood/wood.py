@@ -119,7 +119,7 @@ class _PackedView(RegisterAllow,OverrideObject):
     def override(self, back=False):
         def override(func):
             setattr(self.handler,name,func)
-            if back: self._timeit(return func)
+            if back: return self._timeit(func)
     return override    
 
 
@@ -156,20 +156,25 @@ def base_log_function(o):
 
 class Wood(object):
     def __init__(self,name=__name__,**config):
-        self._app = _web.Application(**config)
-        self._server = _httpserver.HTTPServer(self._app,xheaders=True)
+        self._app_settings = config
         self._name = name
         self.prepare_funcs = []
-        if 'log_function' not in self.application.settings:
-            self.application.settings['log_function'] = base_log_function
+        if 'log_function' not in self._app_settings:
+            self._app_settingssettings['log_function'] = base_log_function
+        self._bind_ports = []
+        self._ui_mods = []
         
     
     @property
     def server(self):
+        if not self._server:
+            self._server = _httpserver.HTTPServer(self.application,xheaders=True)
         return self._server
     
     @property
     def application(self):
+        if not self._app:
+            self._app = _web.Application(**self._app_settings)
         return self._app
     
     def handler(self,uri,handler,host='',**kargs):
@@ -199,7 +204,8 @@ class Wood(object):
         return route
     
     def register(self,view):
-        self.handler(uri=view.uri,handler=view.handler)
+        if isinstance(view,RegisterAllow):
+             self.handler(uri=view.uri,handler=view.handler)
     
     def register_all(self,g):
         for k in g:
@@ -207,8 +213,15 @@ class Wood(object):
             if isinstance(o,RegisterAllow):
                 self.register(o)
     
+    def _bind(self):
+        """
+        Bind all of ports in list self._bind_ports
+        """
+        for p in self._bind_ports:
+            self.server.bind(p)
+    
     def bind(self,port):
-        self.server.bind(port)
+        self._bind_ports.append(port)
     
     def prepare(self,func):
         self.prepare_funcs.append(func)
@@ -224,6 +237,7 @@ class Wood(object):
     
     def start(self,port=None,wokers=None):
         if port: self.bind(port)
+        self._bind()# Bind before start server.
         if not wokers:
             self.server.start()
         else:
@@ -236,4 +250,3 @@ class Wood(object):
         
         
 # The end of the file
-
