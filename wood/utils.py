@@ -26,8 +26,13 @@ class functools(object):
             print('Wraning: a passed function was called,name {}'.format(func.__name__))
             return *args,**kargs
         return hook
-
-
+    
+    @staticmethod
+    def call_or_not(f,*args,**kargs):
+        if f:
+            return f(*args,**kargs)
+        else:
+            return None
 
 
 
