@@ -24,9 +24,10 @@ import tornado.ioloop as _ioloop
 from .timeit import timeit
 import logging
 import time
+from .utils import functools
 
 
-BASELOGTEMPLATE = '{method} {httpver} {path} {handler_name} {request_time}s/{timeit}s'
+BASELOGTEMPLATE = '{method} {httpver} {path} {handler_name} {request_time}s'
 
 
 class BaseTornadoView(_web.RequestHandler):
@@ -42,7 +43,6 @@ class BaseTornadoView(_web.RequestHandler):
         host=_r.host,
         args=_r.arguments,
         request_time=_r.request_time(),
-        timeit=self._time,
         handler_name=self.__name__,
         )
     
@@ -50,8 +50,6 @@ class BaseTornadoView(_web.RequestHandler):
         info = self._get_info()
         return BASELOGTEMPLATE.format(**info)
     
-    def timeit_callback(self,s):
-        self._time = s
         
 
 class RegisterAllow(object):
@@ -111,16 +109,6 @@ class _PackedView(RegisterAllow,OverrideObject):
     @property
     def uri(self):
         return self._uri
-    
-    def _timeit(self,f):
-        return timeit(callback=self. handler.timeit_callback,num=2)(f)
-    
-    
-    def override(self, back=False):
-        def override(func):
-            setattr(self.handler,name,func)
-            if back: return self._timeit(func)
-    return override    
 
 
 def _make_empty_view(name='View',uri,*parents):
@@ -151,7 +139,7 @@ def base_log_function(o):
     elif isinstance(o,_web.ErrorHandler):
         _print_and_log(o)# TODO: More simple and useful infomation
     else:
-        _print_and_log(o)   
+        _print_and_log(str(o))
         
 
 class Wood(object):
@@ -160,9 +148,10 @@ class Wood(object):
         self._name = name
         self.prepare_funcs = []
         if 'log_function' not in self._app_settings:
-            self._app_settingssettings['log_function'] = base_log_function
+            self._app_settings['log_function'] = base_log_function
         self._bind_ports = []
         self._ui_mods = []
+        
         
     
     @property
