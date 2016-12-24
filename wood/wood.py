@@ -21,7 +21,6 @@ Under License Apache v2, more information, see file 'LICENSE' in project root di
 import tornado.httpserver as _httpserver
 import tornado.web as _web
 import tornado.ioloop as _ioloop
-from .timeit import timeit
 import logging
 import time
 from .utils import functools
@@ -111,6 +110,58 @@ class _PackedView(RegisterAllow,OverrideObject):
         return self._uri
 
 
+class PackedUIModlue(_web.UIModule):
+    def render(self,*args,**kargs):
+        result = functools.call_or_not(self._dyncall,self,*args,**kargs)
+        if result:
+            self.write(result)
+    
+    def js(self,code):
+        self._jscode = code
+        return self
+    
+    def jsfile(self,*paths):
+        if not self._jsfiles:
+            self._jsfiles = []
+        for v in paths:
+            if v not in self._jsfiles:
+                self._jsfiles.append(v)
+        return self
+    
+    def css(self,code):
+        self._csscode = code
+        return self
+    
+    def cssfile(self,*paths):
+        if not self._cssfiles:
+            self._cssfiles = []
+        for v in paths:
+            if v not in self._cssfiles:
+                self._cssfiles.append(v)
+        return self
+    
+    def embedded_javascript(self):
+        return self._jscode
+    
+    def embedded_css(self):
+        return self._csscode
+    
+    def javascript_files(self):
+        return self._jsfiles
+    
+    def css_files(self):
+        return self._cssfiles
+    
+    def prepare(self,f):
+        f(self)
+        return f
+    
+    def dynrender(self,f):
+        self._dyncall = f
+        return f
+    
+
+
 def _make_empty_view(name='View',uri,*parents):
     """
     a help function for make a empty view.
@@ -151,7 +202,8 @@ class Wood(object):
             self._app_settings['log_function'] = base_log_function
         self._bind_ports = []
         self._ui_mods = []
-        
+        if not self._app_settings['ui_modules']:
+            self._app_settings['ui_modules'] = {}
         
     
     @property
