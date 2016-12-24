@@ -1,7 +1,7 @@
 from setuptools import setup
 
 
-VERSION='0.11untest'
+VERSION='0.1.0.alpha-1'
 
 
 setup(
@@ -17,5 +17,4 @@ classifiers=[
 ],
 packages=['wood']
 )
-
 
