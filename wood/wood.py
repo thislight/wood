@@ -63,7 +63,7 @@ class OverrideObject(object):
         return override
 
 
-class _PackedView(RegisterAllow,OverrideObject):
+class PackedView(RegisterAllow,OverrideObject):
     def __init__(self,view,uri='/'):
         self._view = view
         self.__name__ = self._view.__name__ + '_Packed'
@@ -165,10 +165,10 @@ class PackedUIModlue(_web.UIModule):
 def _make_empty_view(name='View',uri,*parents):
     """
     a help function for make a empty view.
-    Return: _PackedView
+    Return: PackedView
     """
     view = type(name,(BaseTornadoView,*parent),{})
-    _packed = _PackedView(view,uri=uri)
+    _packed = PackedView(view,uri=uri)
     return _packed
 
 
@@ -223,7 +223,7 @@ class Wood(object):
     
     def empty(self,uri,name,*parents):
         """
-        Return: _PackedView
+        Return: PackedView
         """
         v = _make_empty_view(uri=uri,name=name,*parents)
         self.register(v)
