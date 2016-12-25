@@ -21,7 +21,7 @@ Under License Apache v2, more infomation, see file 'LICENSE' in project root dir
 
 from wood import Wood
 
-w = Wood(__name__,debug=True,log_function=print)
+w = Wood(__name__,debug=True)
 
 @w.route(r'/',method='GET')
 def index_page(self):
