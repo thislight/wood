@@ -26,25 +26,28 @@ from .utils import functools
 BASELOGTEMPLATE = '{method} {httpver} {path} {handler_name} {request_time}s'
 
 
-class BaseTornadoView(_web.RequestHandler):
-    def _get_info(self):
-        _r = self.request
-        return dict(
-            method=_r.method,
-            path=_r.path,
-            httpver=_r.version,
-            cliip=_r.remote_ip,
-            p=_r.protocol,
-            issec=True if _r.protocol.endswith('s') else False,
-            host=_r.host,
-            args=_r.arguments,
-            request_time=_r.request_time(),
-            handler_name=self.__name__,
-        )
+def _get_info(handler):
+    _r = handler.request
+    return dict(
+        method=_r.method,
+        path=_r.path,
+        httpver=_r.version,
+        cliip=_r.remote_ip,
+        p=_r.protocol,
+        issec=True if _r.protocol.endswith('s') else False,
+        host=_r.host,
+        args=_r.arguments,
+        request_time=_r.request_time(),
+        handler_name=handler.__name__,
+    )
 
-    def __log__(self):
-        info = self._get_info()
-        return BASELOGTEMPLATE.format(**info)
+
+def _get_formated_log_string_from_handler(handler):
+    return BASELOGTEMPLATE.format(**_get_info(handler))
+
+
+class BaseTornadoView(_web.RequestHandler):
+    __log__ = lambda self: _get_formated_log_string_from_handler(self)
 
 
 class RegisterAllow(object):
@@ -200,9 +203,9 @@ def _print_and_log(msg, logger=logging.getLogger()):
 
 def base_log_function(o):
     if hasattr(o, '__log__'):  #
-        _print_and_log(o.__log__)
+        _print_and_log(o.__log__())
     elif isinstance(o, _web.ErrorHandler):
-        _print_and_log(o)  # TODO: More simple and useful infomation
+        _print_and_log(_get_formated_log_string_from_handler(o))
     else:
         _print_and_log(str(o))
 
