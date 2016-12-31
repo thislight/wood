@@ -11,6 +11,8 @@ install:
   - pip install pytest
   - pip install -r test-requirements.txt
   - pip install .
+addons:
+  code_climate:
+    repo_token: 0223454d8dc0c63f69f3b3d46188c74eaf01b2b921d061cabb373974491b1f1a
 script: py.test
-
 
