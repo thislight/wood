@@ -224,13 +224,13 @@ class Wood(object):
 
     @property
     def server(self):
-        if not hasattr(self,'_server'):
+        if not hasattr(self, '_server'):
             self._server = _httpserver.HTTPServer(self.application, xheaders=True)
         return self._server
 
     @property
     def application(self):
-        if not hasattr(self,'_app'):
+        if not hasattr(self, '_app'):
             self._app = _web.Application(**self._app_settings)
         return self._app
 
