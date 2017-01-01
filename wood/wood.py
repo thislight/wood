@@ -293,7 +293,11 @@ class Wood(object):
 
     def _start(self):
         self.call_prepare()
-        self.ioloop.start()
+        try:
+            self.ioloop.start()
+        except Exception as e:
+            self.server.stop()
+            raise SystemExit from e
 
     def start(self, port=None, wokers=None):
         if port:
