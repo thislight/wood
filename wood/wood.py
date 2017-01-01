@@ -38,7 +38,7 @@ def _get_info(handler):
         host=_r.host,
         args=_r.arguments,
         request_time=_r.request_time(),
-        handler_name=handler.__name__,
+        handler_name=getattr(handler,'__name__',str(handler)),
     )
 
 
@@ -180,6 +180,7 @@ def _make_empty_view(uri, name='View', *parents):
     :return: PackedHandler
     """
     view = type(name, (BaseTornadoView, *parents), {})
+    view.__name__ = name
     _packed = PackedHandler(view, uri=uri)
     return _packed
 
