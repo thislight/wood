@@ -4,15 +4,11 @@ python:
   - "3.3"
   - "3.4"
   - "3.5"
-  # PyPy versions
-  - "pypy3" # Pypy3 2.4.0
-  - "pypy-5.3.1"
+  # Pypy
+  - "pypy3"
 # command to install dependencies
 install:
   - pip install pytest
   - pip install -r test-requirements.txt
   - pip install .
 script: py.test
-
-
-

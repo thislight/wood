@@ -1,12 +1,11 @@
 from setuptools import setup
 
-
-VERSION=0.1
+VERSION = '0.2.0-alpha'
 
 
 setup(
 name='wood',
-version=str(VERSION),
+version=VERSION,
 license='http://www.apache.org/licenses/LICENSE-2.0',
 description='A faster way to build web app by tornado',
 author='thislight',
@@ -17,6 +16,4 @@ classifiers=[
 ],
 packages=['wood']
 )
-
-
 

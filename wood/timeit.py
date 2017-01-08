@@ -18,31 +18,26 @@ Copyright 2016 thislight
 
 Under License Apache v2, more information, see file 'LICENSE' in project root directory.
 """
-import requests
 
-def _make_test_web_server(name):
-    from wood import Wood
-    sev = Wood(name)
-    return sev
+import time
 
 
-s = _make_test_web_server(__name__)
-
-
-def test_can_define_method():
-    p = s.empty('/','TESTPAGE')
-    @p.get
-    def test(self):
-        pass
-    assert hasattr(p.handler,'get')
-
-
-def test_can_override_method():
-    p = s.empty('/1','TESTPAGE')
-    @p.override('get_current_user')
-    def test(self):
-        pass
-    assert hasattr(p.handler,'get_current_user')
-
-
+def timeit(callback=None,num=4):
+    """
+    A function timer.
+    arg callback: a function to rev. time result.
+    arg num: ...example: 0.162839, num=4 -> callback('0.1628')
+    Return: function
+    """
+     def timeit(f)
+        if not callback: return f
+        def mock_func(*args,**kargs):
+            t1 = time.process_time()
+            _r = f(*args,**kargs)
+            t2 = time.process_time()
+            template = '{0:.%if}' % num
+            callback(template.format(t2-t1))
+            return _r
+       return mock_func
+    return timeit
 

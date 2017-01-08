@@ -1,4 +1,3 @@
-
 """
 Wood author: thislight
 
@@ -19,18 +18,23 @@ Copyright 2016 thsilight
 Under License Apache v2, more infomation, see file 'LICENSE' in project root directory.
 """
 
+import os.path
 from wood import Wood
+from tornado.web import UIModule
 
-w = Wood(__name__,debug=True)
+w = Wood(__name__, debug=True, template_path=os.path.join('.', 'templates'))
 
-@w.route(r'/',method='GET')
-def index_page(self):
-    self.write('滑稽，这里什么都没有\n(HuajiEnv)')
 
-if __name__ == '__main__':
-    w.start(port=6000)
-    
-    
-    
-    
-    
+@w.uimod('SayHello')
+class SayHello(UIModule):
+    def render(self, name):
+        return '<h1>Hello, {name}</h1>'.format(name=name)
+
+
+@w.route(r'/')
+def hello_page(self):
+    self.render('sayhello.html')
+
+
+if __name__ == "__main__":
+    w.start(6000)
