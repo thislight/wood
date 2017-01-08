@@ -279,6 +279,10 @@ class Wood(object):
             self.server.start(wokers)
         self._start()
 
+    def stop(self):
+        self.ioloop.stop()
+        self.server.stop()
+
     @property
     def ioloop(self):
         return _ioloop.IOLoop.current()
