@@ -21,7 +21,7 @@ import tornado.httpserver as _httpserver
 import tornado.web as _web
 import tornado.ioloop as _ioloop
 import logging
-from .utils import functools
+
 
 BASELOGTEMPLATE = '{method} {httpver} {path} {handler_name} {request_time}s'
 
@@ -51,6 +51,9 @@ class BaseTornadoView(_web.RequestHandler):
 
 
 class RegisterAllow(object):
+    """
+    Override all of methods to use for route handler
+    """
     @property
     def uri(self):
         """
@@ -119,57 +122,6 @@ class PackedHandler(RegisterAllow):
         return self._uri
 
 
-class PackedUIModlue(_web.UIModule):
-    def render(self, *args, **kargs):
-        result = functools.call_or_not(self._dyncall, self, *args, **kargs)
-        if result:
-            return result
-
-    def js(self, code):
-        self._jscode = code
-        return self
-
-    def jsfile(self, *paths):
-        if not self._jsfiles:
-            self._jsfiles = []
-        for v in paths:
-            if v not in self._jsfiles:
-                self._jsfiles.append(v)
-        return self
-
-    def css(self, code):
-        self._csscode = code
-        return self
-
-    def cssfile(self, *paths):
-        if not self._cssfiles:
-            self._cssfiles = []
-        for v in paths:
-            if v not in self._cssfiles:
-                self._cssfiles.append(v)
-        return self
-
-    def embedded_javascript(self):
-        return self._jscode
-
-    def embedded_css(self):
-        return self._csscode
-
-    def javascript_files(self):
-        return self._jsfiles
-
-    def css_files(self):
-        return self._cssfiles
-
-    def prepare(self, f):
-        f(self)
-        return f
-
-    def dynrender(self, f):
-        self._dyncall = f
-        return f
-
-
 def _make_empty_view(uri, name='View', *parents):
     """
     a help function for make a empty view.
@@ -236,10 +188,10 @@ class Wood(object):
         ADD handler to handle uri
         :param uri: URI for handler
         :param handler: handler
-        :param kargs: arguments call handler.prepare (tornado feture)
+        :param kargs: arguments call handler.prepare (tornado feature)
         :return: None
         """
-        self.application.handlers.append(_make_uri_tuple(uri, handler, kargs))
+        self.application.add_handlers('.*$', [_make_uri_tuple(uri, handler, kargs)])
 
     def empty(self, uri, name, *parents):
         """
@@ -275,6 +227,21 @@ class Wood(object):
             o = g[k]
             if isinstance(o, RegisterAllow):
                 self.register(o)
+
+    def uimod(self, name):
+        """
+        A dec to add ui_module
+        :param name: Name of ui module
+        :return: function
+        """
+
+        def register_uimod(cls):
+            self.application.ui_modules.update({
+                name: cls
+            })
+            return cls
+
+        return register_uimod
 
     def _bind(self):
         """
