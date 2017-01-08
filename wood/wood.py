@@ -38,7 +38,7 @@ def _get_info(handler):
         host=_r.host,
         args=_r.arguments,
         request_time=_r.request_time(),
-        handler_name=getattr(handler,'__name__',str(handler)),
+        handler_name=getattr(handler, '__name__', str(handler)),
     )
 
 
@@ -113,10 +113,6 @@ class PackedHandler(RegisterAllow):
     @property
     def handler(self):
         return self._view
-
-    @handler.setter
-    def handler(self, value):
-        self._view = value
 
     @property
     def uri(self):
@@ -235,8 +231,15 @@ class Wood(object):
             self._app = _web.Application(**self._app_settings)
         return self._app
 
-    def handler(self, uri, handler, host='', **kargs):
-        self.application.add_handlers(host, [_make_uri_tuple(uri, handler, kargs)])
+    def handler(self, uri, handler, **kargs):
+        """
+        ADD handler to handle uri
+        :param uri: URI for handler
+        :param handler: handler
+        :param kargs: arguments call handler.prepare (tornado feture)
+        :return: None
+        """
+        self.application.handlers.append(_make_uri_tuple(uri, handler, kargs))
 
     def empty(self, uri, name, *parents):
         """
