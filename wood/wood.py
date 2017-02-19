@@ -22,7 +22,6 @@ import tornado.web as _web
 import tornado.ioloop as _ioloop
 import logging
 
-
 BASELOGTEMPLATE = '{method} {httpver} {path} {handler_name} {request_time}s'
 
 
@@ -54,6 +53,7 @@ class RegisterAllow(object):
     """
     Override all of methods to use for route handler
     """
+
     @property
     def uri(self):
         """
@@ -242,6 +242,20 @@ class Wood(object):
             return cls
 
         return register_uimod
+
+    def websocket(self, uri):
+        """
+        A dec to add websocket handler
+        :param uri: str
+        :return: function
+        """
+
+        def register_websocket(cls):
+            packed = PackedHandler(cls, uri)
+            self.register(packed)
+            return packed
+
+        return register_websocket
 
     def _bind(self):
         """
