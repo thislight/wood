@@ -21,9 +21,6 @@ from . import utils
 import tornado.httpserver as _httpserver
 import tornado.web as _web
 import tornado.ioloop as _ioloop
-import logging
-import os.path
-import time
 
 BASELOGTEMPLATE = '{method} {httpver} {path} {handler_name} {request_time}s'
 
