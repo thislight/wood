@@ -30,7 +30,8 @@ def _get_formated_log_string_from_handler(handler):
 
 
 class BaseTornadoView(_web.RequestHandler):
-    __log__ = lambda self: _get_formated_log_string_from_handler(self)
+    def __log__(self):
+        return _get_formated_log_string_from_handler(self)
 
     def get_upload_file(self,name,offest=0):
         f = self.request.files[name][offest]
