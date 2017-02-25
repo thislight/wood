@@ -1,6 +1,6 @@
 from setuptools import setup
 
-VERSION = '0.2.0-alpha'
+VERSION = '0.2.0-alpha.1'
 
 
 setup(
