@@ -17,7 +17,8 @@ Copyright 2016 thislight
 
 Under License Apache v2, more information, see file 'LICENSE' in project root directory.
 """
-
+import os
+import time
 
 def get_info(handler):
     _r = handler.request
@@ -33,3 +34,19 @@ def get_info(handler):
         request_time=_r.request_time(),
         handler_name=getattr(handler, '__name__', str(handler)),
     )
+
+
+class UploadedFile(object):
+    def __init__(self, name, b):
+        self.name = name
+        self.body = b
+
+    def one_name(self):
+        return str(time.time()) + self.name
+
+    def write_to(self, path):
+        f = open(path, "w+b")
+        f.write(self.body)
+
+    def write_auto(self, basepath):
+        self.write_to(os.path.join(basepath, self.one_name()))

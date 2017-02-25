@@ -31,28 +31,13 @@ BASELOGTEMPLATE = '{method} {httpver} {path} {handler_name} {request_time}s'
 def _get_formated_log_string_from_handler(handler):
     return BASELOGTEMPLATE.format(**utils.get_info(handler))
 
-class UploadedFile(object):
-    def __init__(self,name,b):
-        self.name = name
-        self.body = b
-
-    def one_name(self):
-        return str(time.time())+self.name
-
-    def write_to(self,path):
-        f = open(path,"w+b")
-        f.write(self.body)
-
-    def write_auto(self,basepath):
-        self.write_to(os.path.join(basepath,self.one_name()))
-
 
 class BaseTornadoView(_web.RequestHandler):
     __log__ = lambda self: _get_formated_log_string_from_handler(self)
 
     def get_upload_file(self,name,offest=0):
         f = self.request.files[name][offest]
-        return UploadedFile(f['filename'],f['body'])
+        return utils.UploadedFile(f['filename'], f['body'])
 
 
 class RegisterAllow(object):
