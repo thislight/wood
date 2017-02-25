@@ -69,6 +69,15 @@ class UploadedFile(object):
     def write_auto(self, basepath):
         self.write_to(os.path.join(basepath, self.one_name()))
 
+    @classmethod
+    def from_reqfile(cls, f):
+        """
+        Create object from file dict of tornado request
+        :param f: dict
+        :return: UploadedFile
+        """
+        return cls(f["filename"], f["body"])
+
 
 class RegisterAllow(object):
     """

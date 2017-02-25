@@ -35,7 +35,7 @@ class BaseTornadoView(_web.RequestHandler):
 
     def get_upload_file(self,name,offest=0):
         f = self.request.files[name][offest]
-        return utils.UploadedFile(f['filename'], f['body'])
+        return utils.UploadedFile.from_reqfile(f)
 
 
 class PackedHandler(utils.RegisterAllow):
