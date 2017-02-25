@@ -19,46 +19,4 @@ Under License Apache v2, more information, see file 'LICENSE' in project root di
 """
 
 
-class functools(object):
-    @staticmethod
-    def pass_func(func):
-        def hook(self, *args, **kargs):
-            print('Wraning: a passed function was called,name {}'.format(func.__name__))
-            return
 
-        return hook
-
-    @staticmethod
-    def call_or_not(f, *args, **kargs):
-        if f:
-            return f(*args, **kargs)
-        else:
-            return None
-
-
-class LazyProxy(object):
-    def __init__(self, cls):
-        self._cls = cls
-        self._mocks = {}
-
-    def __call__(self, *args, **kargs):
-        self._obj = self._cls(*args, **kargs)
-
-    def mock(self, name, value):
-        self._mocks[name] = value
-
-    def __getattr__(self, item):
-        if item in self._mocks:
-            return self._mocks[item]
-        elif self._obj and hasattr(self._obj, item):
-            return getattr(self._obj, item)
-        else:
-            return getattr(self._cls, item)
-
-    def __setattr__(self, name, value):
-        if name in self._mocks:
-            self._mocks[name] = value
-        elif not self._obj:
-            setattr(self._cls, name, value)
-        else:
-            setattr(self._obj, name, value)
