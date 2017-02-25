@@ -19,4 +19,17 @@ Under License Apache v2, more information, see file 'LICENSE' in project root di
 """
 
 
-
+def get_info(handler):
+    _r = handler.request
+    return dict(
+        method=_r.method,
+        path=_r.path,
+        httpver=_r.version,
+        cliip=_r.remote_ip,
+        p=_r.protocol,
+        issec=True if _r.protocol.endswith('s') else False,
+        host=_r.host,
+        args=_r.arguments,
+        request_time=_r.request_time(),
+        handler_name=getattr(handler, '__name__', str(handler)),
+    )

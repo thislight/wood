@@ -17,6 +17,7 @@ Copyright 2016 thislight
 
 Under License Apache v2, more information, see file 'LICENSE' in project root directory.
 """
+from . import utils
 import tornado.httpserver as _httpserver
 import tornado.web as _web
 import tornado.ioloop as _ioloop
@@ -27,24 +28,8 @@ import time
 BASELOGTEMPLATE = '{method} {httpver} {path} {handler_name} {request_time}s'
 
 
-def _get_info(handler):
-    _r = handler.request
-    return dict(
-        method=_r.method,
-        path=_r.path,
-        httpver=_r.version,
-        cliip=_r.remote_ip,
-        p=_r.protocol,
-        issec=True if _r.protocol.endswith('s') else False,
-        host=_r.host,
-        args=_r.arguments,
-        request_time=_r.request_time(),
-        handler_name=getattr(handler, '__name__', str(handler)),
-    )
-
-
 def _get_formated_log_string_from_handler(handler):
-    return BASELOGTEMPLATE.format(**_get_info(handler))
+    return BASELOGTEMPLATE.format(**utils.get_info(handler))
 
 class UploadedFile(object):
     def __init__(self,name,b):
