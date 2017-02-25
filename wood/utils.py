@@ -50,3 +50,25 @@ class UploadedFile(object):
 
     def write_auto(self, basepath):
         self.write_to(os.path.join(basepath, self.one_name()))
+
+
+class RegisterAllow(object):
+    """
+    Override all of methods to use for route handler
+    """
+
+    @property
+    def uri(self):
+        """
+        Override to return a uri to register
+        :return: str
+        """
+        return None
+
+    @property
+    def handler(self):
+        """
+        Override to return a handler to register
+        :return: tornado.web.RequestHandler
+        """
+        return None

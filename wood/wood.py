@@ -40,29 +40,7 @@ class BaseTornadoView(_web.RequestHandler):
         return utils.UploadedFile(f['filename'], f['body'])
 
 
-class RegisterAllow(object):
-    """
-    Override all of methods to use for route handler
-    """
-
-    @property
-    def uri(self):
-        """
-        Override to return a uri to register
-        :return: str
-        """
-        return None
-
-    @property
-    def handler(self):
-        """
-        Override to return a handler to register
-        :return: tornado.web.RequestHandler
-        """
-        return None
-
-
-class PackedHandler(RegisterAllow):
+class PackedHandler(utils.RegisterAllow):
     def __init__(self, view, uri='/'):
         self._view = view
         self.__name__ = self._view.__name__ + '_Packed'
@@ -210,13 +188,13 @@ class Wood(object):
         return route
 
     def register(self, view):
-        if isinstance(view, RegisterAllow):
+        if isinstance(view, utils.RegisterAllow):
             self.handler(uri=view.uri, handler=view.handler)
 
     def register_all(self, g):
         for k in g:
             o = g[k]
-            if isinstance(o, RegisterAllow):
+            if isinstance(o, utils.RegisterAllow):
                 self.register(o)
 
     def uimod(self, name):
