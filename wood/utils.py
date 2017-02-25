@@ -99,9 +99,11 @@ class UploadedFile(object):
         """
         Wtrie to a file in dir `basepath`
         :param basepath: str, dir path
-        :return:
+        :return: str, current file path
         """
-        self.write_to(os.path.join(basepath, self.one_name()))
+        path = os.path.join(basepath, self.one_name())
+        self.write_to(path)
+        return path
 
     @classmethod
     def from_reqfile(cls, f):
