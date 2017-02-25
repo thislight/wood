@@ -169,10 +169,20 @@ class Wood(object):
         return route
 
     def register(self, view):
+        """
+        Add handler from a RegisterAllow object
+        :param view: utils.RegisterAllow
+        :return:
+        """
         if isinstance(view, utils.RegisterAllow):
             self.handler(uri=view.uri, handler=view.handler)
 
     def register_all(self, g):
+        """
+        Register all RegisterAllow object of a dict
+        :param g: dict
+        :return:
+        """
         for k in g:
             o = g[k]
             if isinstance(o, utils.RegisterAllow):
@@ -215,17 +225,35 @@ class Wood(object):
             self.server.bind(p)
 
     def bind(self, port):
+        """
+        Bind a port
+        :param port: int
+        :return:
+        """
         self._bind_ports.append(port)
 
     def prepare(self, func):
+        """
+        A dec to add function that called before ioloop start
+        :param func: function
+        :return:
+        """
         self.prepare_funcs.append(func)
         return func
 
     def call_prepare(self):
+        """
+        Called before ioloop start
+        :return:
+        """
         for f in self.prepare_funcs:
             f(self)
 
     def _start(self):
+        """
+        Call parepre function and start ioloop
+        :return:
+        """
         self.call_prepare()
         try:
             self.ioloop.start()
@@ -234,6 +262,12 @@ class Wood(object):
             raise SystemExit from e
 
     def start(self, port=None, wokers=None):
+        """
+        Start server
+        :param port: int, call self.bind
+        :param wokers: int, how many workers you want to start
+        :return:
+        """
         if port:
             self.bind(port)
         self._bind()  # Bind before start server.
@@ -244,11 +278,19 @@ class Wood(object):
         self._start()
 
     def stop(self):
+        """
+        Stop server safely
+        :return:
+        """
         self.ioloop.stop()
         self.server.stop()
 
     @property
     def ioloop(self):
+        """
+        Get current ioloop
+        :return: _ioloop.IOLOOP
+        """
         return _ioloop.IOLoop.current()
 
 # The end of the file

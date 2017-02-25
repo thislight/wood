@@ -22,6 +22,11 @@ import time
 import logging
 
 def get_info(handler):
+    """
+    Get infomation from handler, used to format log messages
+    :param handler: handler
+    :return: dict
+    """
     _r = handler.request
     return dict(
         method=_r.method,
@@ -38,6 +43,13 @@ def get_info(handler):
 
 
 def make_uri_tuple(uri, handler, kargs=None):
+    """
+    Get uri tuple: tornado format
+    :param uri: str, uri
+    :param handler: tornado's handler
+    :param kargs: other args
+    :return: tuple
+    """
     t = [uri, handler]
     if kargs: t.append(kargs)
     return tuple(t)
@@ -55,18 +67,40 @@ def print_and_log(msg, logger=logging.getLogger()):
 
 
 class UploadedFile(object):
+    """
+    Uploaded file
+    """
     def __init__(self, name, b):
+        """
+        init a object
+        :param name: str,filename
+        :param b: bytes of file
+        """
         self.name = name
         self.body = b
 
     def one_name(self):
+        """
+        Get a name with time string
+        :return:
+        """
         return str(time.time()) + self.name
 
     def write_to(self, path):
+        """
+        Write to a path
+        :param path: str, a path you want to write
+        :return:
+        """
         f = open(path, "w+b")
         f.write(self.body)
 
     def write_auto(self, basepath):
+        """
+        Wtrie to a file in dir `basepath`
+        :param basepath: str, dir path
+        :return:
+        """
         self.write_to(os.path.join(basepath, self.one_name()))
 
     @classmethod
