@@ -49,7 +49,7 @@ def _get_formated_log_string_from_handler(handler):
 class UploadedFile(object):
     def __init__(self,name,b):
         self.name = name
-        self.body = body
+        self.body = b
 
     def one_name(self):
         return str(time.time())+self.name
