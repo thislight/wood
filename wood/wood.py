@@ -102,24 +102,13 @@ def _make_empty_view(uri, name='View', *parents):
     return _packed
 
 
-def _print_and_log(msg, logger=logging.getLogger()):
-    """
-    Print msg and log msg to logger
-    :param msg: msg string
-    :param logger: A logger from logging
-    :return: None
-    """
-    print(msg)
-    logger.info(msg)
-
-
 def base_log_function(o):
     if hasattr(o, '__log__'):  #
-        _print_and_log(o.__log__())
+        utils.print_and_log(o.__log__())
     elif isinstance(o, _web.ErrorHandler):
-        _print_and_log(_get_formated_log_string_from_handler(o))
+        utils.print_and_log(_get_formated_log_string_from_handler(o))
     else:
-        _print_and_log(str(o))
+        utils.print_and_log(str(o))
 
 
 class Wood(object):

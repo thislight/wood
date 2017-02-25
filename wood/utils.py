@@ -19,6 +19,7 @@ Under License Apache v2, more information, see file 'LICENSE' in project root di
 """
 import os
 import time
+import logging
 
 def get_info(handler):
     _r = handler.request
@@ -40,6 +41,17 @@ def make_uri_tuple(uri, handler, kargs=None):
     t = [uri, handler]
     if kargs: t.append(kargs)
     return tuple(t)
+
+
+def print_and_log(msg, logger=logging.getLogger()):
+    """
+    Print msg and log msg to logger
+    :param msg: msg string
+    :param logger: A logger from logging
+    :return: None
+    """
+    print(msg)
+    logger.info(msg)
 
 
 class UploadedFile(object):
