@@ -36,6 +36,12 @@ def get_info(handler):
     )
 
 
+def make_uri_tuple(uri, handler, kargs=None):
+    t = [uri, handler]
+    if kargs: t.append(kargs)
+    return tuple(t)
+
+
 class UploadedFile(object):
     def __init__(self, name, b):
         self.name = name

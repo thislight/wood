@@ -102,12 +102,6 @@ def _make_empty_view(uri, name='View', *parents):
     return _packed
 
 
-def _make_uri_tuple(uri, handler, kargs=None):
-    t = [uri, handler]
-    if kargs: t.append(kargs)
-    return tuple(t)
-
-
 def _print_and_log(msg, logger=logging.getLogger()):
     """
     Print msg and log msg to logger
@@ -160,7 +154,7 @@ class Wood(object):
         :param kargs: arguments call handler.prepare (tornado feature)
         :return: None
         """
-        self.application.add_handlers('.*$', [_make_uri_tuple(uri, handler, kargs)])
+        self.application.add_handlers('.*$', [utils.make_uri_tuple(uri, handler, kargs)])
 
     def empty(self, uri, name, *parents):
         """
