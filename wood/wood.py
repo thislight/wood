@@ -89,7 +89,7 @@ class PackedHandler(utils.RegisterAllow):
         return self._uri
 
 
-def _make_empty_view(uri, name='View', *parents):
+def make_empty_view(uri, name='View', *parents):
     """
     a help function for make a empty view.
     :return: PackedHandler
@@ -147,7 +147,7 @@ class Wood(object):
         """
         :return: PackedHandler
         """
-        v = _make_empty_view(uri=uri, name=name, *parents)
+        v = make_empty_view(uri=uri, name=name, *parents)
         self.register(v)
         return v
 
