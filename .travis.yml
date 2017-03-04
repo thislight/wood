@@ -1,9 +1,7 @@
 language: python
 python:
-  - "3.2"
-  - "3.3"
-  - "3.4"
   - "3.5"
+  - "3.6"
   # Pypy
   - "pypy3"
 # command to install dependencies
@@ -11,4 +9,4 @@ install:
   - pip install pytest
   - pip install -r test-requirements.txt
   - pip install .
-script: py.test
+script: py.test tests
