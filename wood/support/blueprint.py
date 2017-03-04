@@ -17,7 +17,7 @@ Copyright 2016 thislight
 
 Under License Apache v2, more information, see file 'LICENSE' in project root directory.
 """
-from ..wood import make_empty_view
+from ..wood import make_empty_view, Wood
 
 class Blueprint(object):
     def __init__(self):
