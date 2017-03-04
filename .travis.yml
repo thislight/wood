@@ -2,8 +2,6 @@ language: python
 python:
   - "3.5"
   - "3.6"
-  # Pypy
-  - "pypy3"
 # command to install dependencies
 install:
   - pip install pytest
