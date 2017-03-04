@@ -26,6 +26,6 @@ def test_blueprint_can_add_handlers_to_wood():
 def test_blueprint_can_get_new_wood():
     b = make_example_blueprint()
 
-    w.get_wood()
+    w = b.get_wood()
 
     assert len(w.application.handlers) > 0
