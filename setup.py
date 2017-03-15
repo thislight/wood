@@ -1,6 +1,6 @@
 from setuptools import setup
 
-VERSION = '0.2.0-alpha.1'
+VERSION = '0.2.1-alpha'
 
 
 setup(
@@ -14,6 +14,6 @@ install_requires=['tornado'],
 classifiers=[
 'License :: OSI Approved :: Apache Software License',
 ],
-packages=['wood']
+packages=['wood','wood.support']
 )
 
