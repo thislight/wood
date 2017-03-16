@@ -34,6 +34,7 @@ def test_can_clean_queue():
 def test_manager_can_call_event_callback():
     clean()
     callback_function = Mock()
+    callback_function._mock_unsafe = True
     event.EventManager.callback('test',callback_function)
     callback_function.assert_not_called()
 
